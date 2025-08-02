@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(activityMainBinding.getRoot());
 
         ViewPager2 viewPager2 = activityMainBinding.viewPager;
-        viewPager2.setAdapter(new ViewPagerAdapter(this));
+        viewPager2.setAdapter(new ViewPagerAdapter(this, null));
         viewPager2.setUserInputEnabled(false);
 
         TabLayout tabLayout = activityMainBinding.tabLayout;
@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
                     bundle = new Bundle();
                     bundle.putString("username", usernameSearchEditText.getText().toString().trim());
                     bundle.putString("cursor", "" );
+                    viewPager2.setAdapter(new ViewPagerAdapter(this, bundle));
+                    viewPager2.setUserInputEnabled(false);
                 } else {
                     Log.d(TAG, "Search null");
                 }
@@ -64,8 +66,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     public static class ViewPagerAdapter extends FragmentStateAdapter {
-        public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
+
+        private Bundle mBundle;
+        public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity, Bundle bundle) {
             super(fragmentActivity);
+            this.mBundle = bundle;
         }
 
         @NonNull
@@ -74,15 +79,15 @@ public class MainActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     FollowersFragment followersFragment = new FollowersFragment();
-                    followersFragment.setArguments(bundle);
+                    followersFragment.setArguments(mBundle);
                     return followersFragment;
                 case 1:
                     FollowingFragment followingFragment = new FollowingFragment();
-                    followingFragment.setArguments(bundle);
+                    followingFragment.setArguments(mBundle);
                     return followingFragment;
             }
             FollowersFragment followersFragment = new FollowersFragment();
-            followersFragment.setArguments(bundle);
+            followersFragment.setArguments(mBundle);
             return followersFragment;
         }
 

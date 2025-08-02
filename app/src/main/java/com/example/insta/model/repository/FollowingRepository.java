@@ -45,7 +45,7 @@ public class FollowingRepository {
     ) {
         isLoading.setValue(true);
         Call<UsersList> call = apiInterface.getFollowing(
-                new RequestBody("__omkar__2006", "")
+                new RequestBody(username, cursor)
         );
 
         call.enqueue(new Callback<>() {

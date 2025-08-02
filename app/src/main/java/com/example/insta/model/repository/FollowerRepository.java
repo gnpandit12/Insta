@@ -43,7 +43,7 @@ public class FollowerRepository {
     ) {
         isLoading.setValue(true);
         Call<UsersList> call = apiInterface.getFollowers(
-                new RequestBody("__omkar__2006", "")
+                new RequestBody(username, cursor)
         );
 
         call.enqueue(new Callback<>() {

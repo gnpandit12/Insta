@@ -1,6 +1,9 @@
 package com.example.insta.view.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,7 +51,7 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
             username = getArguments().getString("username");
             cursor = getArguments().getString("cursor");
         } else {
-            username = "__omkar__2006";
+            username = "";
             cursor = "";
         }
 
@@ -65,7 +68,7 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
 
 
         progressBar.setVisibility(View.VISIBLE);
-        getFollowings("__omkar__2006", "");
+        getFollowings(username, cursor);
     }
 
     @Override
@@ -110,7 +113,20 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
 
     @Override
     public void onUserClicked(String userName) {
+        Uri uri = Uri.parse("http://instagram.com/_u/"+userName);
 
+
+        Intent i= new Intent(Intent.ACTION_VIEW,uri);
+
+        i.setPackage("com.instagram.android");
+
+        try {
+            startActivity(i);
+        } catch (ActivityNotFoundException e) {
+
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://instagram.com/xxx")));
+        }
     }
 
 

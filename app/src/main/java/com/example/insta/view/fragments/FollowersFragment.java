@@ -1,6 +1,9 @@
 package com.example.insta.view.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +13,6 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,7 +50,7 @@ public class FollowersFragment extends Fragment implements OnUserClickedListener
             username = getArguments().getString("username");
             cursor = getArguments().getString("cursor");
         } else {
-            username = "__omkar__2006";
+            username = "";
             cursor = "";
         }
 
@@ -66,7 +68,7 @@ public class FollowersFragment extends Fragment implements OnUserClickedListener
         progressBar = fragmentFollowersBinding.followersProgressBar;
         progressBar.setVisibility(View.VISIBLE);
 
-        getFollowers("__omkar__2006", "");
+        getFollowers(username, cursor);
 
     }
 
@@ -114,6 +116,19 @@ public class FollowersFragment extends Fragment implements OnUserClickedListener
 
     @Override
     public void onUserClicked(String userName) {
+        Uri uri = Uri.parse("http://instagram.com/_u/"+userName);
 
+
+        Intent i= new Intent(Intent.ACTION_VIEW,uri);
+
+        i.setPackage("com.instagram.android");
+
+        try {
+            startActivity(i);
+        } catch (ActivityNotFoundException e) {
+
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://instagram.com/xxx")));
+        }
     }
 }
