@@ -72,12 +72,6 @@ public class FollowersFragment extends Fragment implements OnUserClickedListener
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getFollowers(username, cursor);
-    }
-
     @SuppressLint("NotifyDataSetChanged")
     private void getFollowers(String username, String cursor) {
 

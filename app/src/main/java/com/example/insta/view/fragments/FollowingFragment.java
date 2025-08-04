@@ -71,11 +71,6 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
         getFollowings(username, cursor);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getFollowings(username, cursor);
-    }
 
     private void getFollowings(String username, String cursor) {
 

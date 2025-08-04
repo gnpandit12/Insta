@@ -1,9 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Insta" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.Insta" parent="Theme.Material3.DayNight">
+        <!--   Primary Color -->
+        <item name="colorPrimary">#c13584</item>
+<!--        &lt;!&ndash;   darker variant for the status bar and contextual app bars &ndash;&gt;-->
+<!--        <item name="colorPrimaryDark">#c13584</item>-->
+<!--        &lt;!&ndash;   theme UI controls like checkboxes and text fields &ndash;&gt;-->
+<!--        <item name="colorAccent">@color/colorAccent</item>-->
     </style>
 
-    <style name="Theme.Insta" parent="Base.Theme.Insta" />
+    <style name="Theme.Insta" parent="Base.Theme.Insta" >
+
+    </style>
 </resources>

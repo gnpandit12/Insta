@@ -1,12 +1,14 @@
 package com.example.insta.view;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
     ActivityMainBinding activityMainBinding;
-    private final String[] tabLabels = new String[]{"Followers", "Following"};
+    private final String[] tabLabels = new String[]{"Following", "Followers"};
     private EditText usernameSearchEditText;
 
     public static Bundle bundle;
@@ -34,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
+
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#c13584")));
 
         ViewPager2 viewPager2 = activityMainBinding.viewPager;
         viewPager2.setAdapter(new ViewPagerAdapter(this, null));
@@ -78,17 +84,17 @@ public class MainActivity extends AppCompatActivity {
         public Fragment createFragment(int position) {
             switch (position) {
                 case 0:
-                    FollowersFragment followersFragment = new FollowersFragment();
-                    followersFragment.setArguments(mBundle);
-                    return followersFragment;
-                case 1:
                     FollowingFragment followingFragment = new FollowingFragment();
                     followingFragment.setArguments(mBundle);
                     return followingFragment;
+                case 1:
+                    FollowersFragment followersFragment = new FollowersFragment();
+                    followersFragment.setArguments(mBundle);
+                    return followersFragment;
             }
-            FollowersFragment followersFragment = new FollowersFragment();
-            followersFragment.setArguments(mBundle);
-            return followersFragment;
+            FollowingFragment followingFragment = new FollowingFragment();
+            followingFragment.setArguments(mBundle);
+            return followingFragment;
         }
 
         @Override

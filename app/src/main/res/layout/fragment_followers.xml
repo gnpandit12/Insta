@@ -5,10 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragments.FollowersFragment"
-    android:background="#E1306c"
-    android:paddingStart="15dp"
-    android:paddingEnd="15dp"
-    android:paddingTop="15dp">
+    android:background="#E1306c">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/followers_recycler_view"
@@ -17,6 +14,8 @@
         android:orientation="vertical"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:background="#E1306c"
+        android:padding="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <ProgressBar
