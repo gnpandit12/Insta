@@ -1,6 +1,7 @@
 package com.example.insta.view.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +24,9 @@ import com.example.insta.model.adapter.UserRecyclerViewAdapter;
 import com.example.insta.model.data.UsersList;
 import com.example.insta.model.listener.OnUserClickedListener;
 import com.example.insta.viewModel.FollowingViewModel;
+import com.google.gson.Gson;
+
+import retrofit2.Response;
 
 public class FollowingFragment extends Fragment implements OnUserClickedListener {
 
@@ -32,20 +37,13 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
     private ProgressBar progressBar;
     private String username, cursor;
 
+    private Activity activity;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         followingViewModel = new ViewModelProvider(requireActivity()).get(FollowingViewModel.class);
-
-    }
-
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        fragmentFollowingBinding = FragmentFollowingBinding.inflate(inflater, container, false);
 
         if (getArguments() != null) {
             username = getArguments().getString("username");
@@ -55,25 +53,23 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
             cursor = "";
         }
 
-        return fragmentFollowingBinding.getRoot();
-
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        userRecyclerView = fragmentFollowingBinding.followingRecyclerView;
-        progressBar = fragmentFollowingBinding.followingProgressBar;
-
-
-        progressBar.setVisibility(View.VISIBLE);
+        activity = getActivity();
         getFollowings(username, cursor);
     }
 
 
-    private void getFollowings(String username, String cursor) {
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        fragmentFollowingBinding = FragmentFollowingBinding.inflate(inflater, container, false);
+        userRecyclerView = fragmentFollowingBinding.followingRecyclerView;
+        progressBar = fragmentFollowingBinding.followingProgressBar;
+        return fragmentFollowingBinding.getRoot();
+
+    }
+
+    private void getFollowings(String username, String cursor) {
         followingViewModel.getIsLoading().observe(this, aBoolean -> {
             if (aBoolean) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -91,9 +87,22 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
                             Log.d(TAG, "Code: "+usersList.getCode().toString());
                         }
                     } else {
+                        Toast.makeText(getContext(), "User is private or does not exits", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Response null: ");
                     }
+
+//                    activity.runOnUiThread(() -> {
+//                        try {
+//                            Gson gson = new Gson();
+//                            String json = gson.toJson(usersList);
+//                            Log.d(TAG, "Following Response: "+json);
+//                        } catch (Exception e) {
+//                            Log.d(TAG, "Exception: "+e.getMessage());
+//                        }
+//                    });
+
                 });
+
 
 
     }
@@ -109,18 +118,12 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
     @Override
     public void onUserClicked(String userName) {
         Uri uri = Uri.parse("http://instagram.com/_u/"+userName);
-
-
-        Intent i= new Intent(Intent.ACTION_VIEW,uri);
-
-        i.setPackage("com.instagram.android");
-
+        Intent intent= new Intent(Intent.ACTION_VIEW,uri);
+        intent.setPackage("com.instagram.android");
         try {
-            startActivity(i);
+            startActivity(intent);
         } catch (ActivityNotFoundException e) {
-
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://instagram.com/xxx")));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://instagram.com/xxx")));
         }
     }
 

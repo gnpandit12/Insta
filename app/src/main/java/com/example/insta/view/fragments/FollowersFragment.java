@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -38,14 +39,6 @@ public class FollowersFragment extends Fragment implements OnUserClickedListener
 
         followersViewModel = new ViewModelProvider(requireActivity()).get(FollowersViewModel.class);
 
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        fragmentFollowersBinding = FragmentFollowersBinding.inflate(inflater, container, false);
-
         if (getArguments() != null) {
             username = getArguments().getString("username");
             cursor = getArguments().getString("cursor");
@@ -53,23 +46,17 @@ public class FollowersFragment extends Fragment implements OnUserClickedListener
             username = "";
             cursor = "";
         }
-
-
-        return fragmentFollowersBinding.getRoot();
-
-
+        getFollowers(username, cursor);
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
+        fragmentFollowersBinding = FragmentFollowersBinding.inflate(inflater, container, false);
         followersRecyclerView = fragmentFollowersBinding.followersRecyclerView;
         progressBar = fragmentFollowersBinding.followersProgressBar;
-        progressBar.setVisibility(View.VISIBLE);
-
-        getFollowers(username, cursor);
-
+        return fragmentFollowersBinding.getRoot();
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -92,6 +79,7 @@ public class FollowersFragment extends Fragment implements OnUserClickedListener
                                     Log.d(TAG, "Code: "+usersList.getCode().toString());
                                 }
                             } else {
+                                Toast.makeText(getContext(), "User is private or does not exits", Toast.LENGTH_SHORT).show();
                                 Log.d(TAG, "Response null: ");
                             }
 
@@ -111,18 +99,12 @@ public class FollowersFragment extends Fragment implements OnUserClickedListener
     @Override
     public void onUserClicked(String userName) {
         Uri uri = Uri.parse("http://instagram.com/_u/"+userName);
-
-
-        Intent i= new Intent(Intent.ACTION_VIEW,uri);
-
-        i.setPackage("com.instagram.android");
-
+        Intent intent= new Intent(Intent.ACTION_VIEW,uri);
+        intent.setPackage("com.instagram.android");
         try {
-            startActivity(i);
+            startActivity(intent);
         } catch (ActivityNotFoundException e) {
-
-            startActivity(new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("http://instagram.com/xxx")));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://instagram.com/xxx")));
         }
     }
 }

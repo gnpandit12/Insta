@@ -49,9 +49,9 @@ public class FollowerRepository {
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<UsersList> call, @NonNull Response<UsersList> response) {
+                Log.d(TAG, "Followers Response: "+response.body());
                 usersListMutableLiveData.setValue(response.body());
                 isLoading.setValue(false);
-                Log.d(TAG, "onResponse: "+ response);
             }
 
             @Override

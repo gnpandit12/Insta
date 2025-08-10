@@ -4,7 +4,7 @@
         <!--   Primary Color -->
         <item name="colorPrimary">#c13584</item>
 <!--        &lt;!&ndash;   darker variant for the status bar and contextual app bars &ndash;&gt;-->
-<!--        <item name="colorPrimaryDark">#c13584</item>-->
+        <item name="colorPrimaryDark">#c13584</item>
 <!--        &lt;!&ndash;   theme UI controls like checkboxes and text fields &ndash;&gt;-->
 <!--        <item name="colorAccent">@color/colorAccent</item>-->
     </style>

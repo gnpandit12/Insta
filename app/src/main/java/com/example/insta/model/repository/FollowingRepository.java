@@ -1,6 +1,8 @@
 package com.example.insta.model.repository;
 
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -9,7 +11,7 @@ import com.example.insta.model.RequestBody;
 import com.example.insta.model.data.UsersList;
 import com.example.insta.model.retrofit.ApiInterface;
 import com.example.insta.model.retrofit.RetrofitService;
-
+import com.google.gson.Gson;
 
 
 import retrofit2.Call;
@@ -22,6 +24,7 @@ import retrofit2.Response;
  **/
 public class FollowingRepository {
 
+    public static final String TAG = "FollowingRepository";
     private static ApiInterface apiInterface;
     private final MutableLiveData<UsersList> usersListMutableLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
