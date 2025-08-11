@@ -30,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding activityMainBinding;
     private final String[] tabLabels = new String[]{"Following", "Followers"};
 
-    public static Bundle bundle;
     public ViewPager2 viewPager2;
+    public Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +44,13 @@ public class MainActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#c13584")));
 
+        bundle = new Bundle();
+        bundle.putString("username", "");
+        bundle.putString("cursor", "" );
+        bundle.putBoolean("IsSearched", false);
+
         viewPager2 = activityMainBinding.viewPager;
-        viewPager2.setAdapter(new ViewPagerAdapter(this, null));
+        viewPager2.setAdapter(new ViewPagerAdapter(this, bundle));
         viewPager2.setUserInputEnabled(false);
 
         TabLayout tabLayout = activityMainBinding.tabLayout;
@@ -65,9 +70,11 @@ public class MainActivity extends AppCompatActivity {
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
 
-        // Configure the SearchView (optional)
+
+
         if (searchView != null) {
-            searchView.setQueryHint("Search...");
+            searchView.setQueryHint("Enter Instagram Username");
+            searchView.setSubmitButtonEnabled(true);
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
@@ -75,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                     bundle = new Bundle();
                     bundle.putString("username", query);
                     bundle.putString("cursor", "" );
+                    bundle.putBoolean("IsSearched", true);
                     viewPager2.setAdapter(new ViewPagerAdapter(fragmentActivity, bundle));
                     viewPager2.setUserInputEnabled(false);
                     return false;

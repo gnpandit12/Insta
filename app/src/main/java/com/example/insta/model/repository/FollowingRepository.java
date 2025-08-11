@@ -47,9 +47,7 @@ public class FollowingRepository {
             String cursor
     ) {
         isLoading.setValue(true);
-        Call<UsersList> call = apiInterface.getFollowing(
-                new RequestBody(username, cursor)
-        );
+        Call<UsersList> call = apiInterface.getFollowing(new RequestBody(username, cursor));
 
         call.enqueue(new Callback<>() {
             @Override
@@ -61,7 +59,9 @@ public class FollowingRepository {
             @Override
             public void onFailure(Call<UsersList> call, Throwable t) {
                 usersListMutableLiveData.setValue(null);
+                isLoading.setValue(false);
             }
+
         });
 
         return usersListMutableLiveData;

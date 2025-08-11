@@ -36,6 +36,7 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
     private RecyclerView userRecyclerView;
     private ProgressBar progressBar;
     private String username, cursor;
+    private Boolean isSearched;
 
     private Activity activity;
 
@@ -46,15 +47,14 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
         followingViewModel = new ViewModelProvider(requireActivity()).get(FollowingViewModel.class);
 
         if (getArguments() != null) {
+            isSearched = getArguments().getBoolean("IsSearched");
             username = getArguments().getString("username");
             cursor = getArguments().getString("cursor");
-        } else {
-            username = "";
-            cursor = "";
         }
 
         activity = getActivity();
-        getFollowings(username, cursor);
+        getFollowings(username, cursor, isSearched);
+
     }
 
 
@@ -69,7 +69,7 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
 
     }
 
-    private void getFollowings(String username, String cursor) {
+    private void getFollowings(String username, String cursor, Boolean isSearched) {
         followingViewModel.getIsLoading().observe(this, aBoolean -> {
             if (aBoolean) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -78,8 +78,8 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
             }
         });
 
-        followingViewModel.getFollowingMutableLiveData(username, cursor).
-                observe(this, usersList -> {
+        followingViewModel.getFollowingMutableLiveData(username, cursor)
+                .observe(this, usersList -> {
                     if (usersList != null) {
                         if (usersList.getData() != null) {
                             showUsersList(usersList);
@@ -87,7 +87,9 @@ public class FollowingFragment extends Fragment implements OnUserClickedListener
                             Log.d(TAG, "Code: "+usersList.getCode().toString());
                         }
                     } else {
-                        Toast.makeText(getContext(), "User is private or does not exits", Toast.LENGTH_SHORT).show();
+                        if (isSearched) {
+                            Toast.makeText(getContext(), "User is private or does not exits", Toast.LENGTH_SHORT).show();
+                        }
                         Log.d(TAG, "Response null: ");
                     }
 

@@ -32,6 +32,7 @@ public class FollowersFragment extends Fragment implements OnUserClickedListener
     private UserRecyclerViewAdapter userRecyclerViewAdapter;
     private FollowersViewModel followersViewModel;
     private String username, cursor;
+    private Boolean isSearched;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,13 +41,13 @@ public class FollowersFragment extends Fragment implements OnUserClickedListener
         followersViewModel = new ViewModelProvider(requireActivity()).get(FollowersViewModel.class);
 
         if (getArguments() != null) {
+            isSearched = getArguments().getBoolean("IsSearched");
             username = getArguments().getString("username");
             cursor = getArguments().getString("cursor");
-        } else {
-            username = "";
-            cursor = "";
         }
-        getFollowers(username, cursor);
+
+        getFollowers(username, cursor, isSearched);
+
     }
 
     @Override
@@ -60,7 +61,7 @@ public class FollowersFragment extends Fragment implements OnUserClickedListener
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private void getFollowers(String username, String cursor) {
+    private void getFollowers(String username, String cursor, Boolean isSearched) {
 
         followersViewModel.getIsLoading().observe(this, aBoolean -> {
             if (aBoolean) {
@@ -79,7 +80,9 @@ public class FollowersFragment extends Fragment implements OnUserClickedListener
                                     Log.d(TAG, "Code: "+usersList.getCode().toString());
                                 }
                             } else {
-                                Toast.makeText(getContext(), "User is private or does not exits", Toast.LENGTH_SHORT).show();
+                                if (isSearched) {
+                                    Toast.makeText(getContext(), "User is private or does not exits", Toast.LENGTH_SHORT).show();
+                                }
                                 Log.d(TAG, "Response null: ");
                             }
 
